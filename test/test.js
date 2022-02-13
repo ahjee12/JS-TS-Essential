@@ -52,13 +52,11 @@ let x;
 
 const colors = ['red', 'yellow'];
 
-// const yellow = colors[1];
-
+// const yellow = colors[1]; 대신 분해 할당
 const [red, yellow, black] = colors;
 
  // 대입문 : 복사 
  // 객체 : 참조 무조건!!
-
  let Object = {
      isLoading: false,
  }

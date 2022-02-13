@@ -19,7 +19,7 @@ const result   = myFn()
      console.log('즉시');
  })()
 
- const a = function (){
+ const a = function (){     
     return 50;
  }
 

@@ -33,10 +33,13 @@ twoBooks.unshift('한여름 밤의 꿈');
 
 console.log(twoBooks);
 
+//default: ,콤마로 join됨 빈 문자열 ''인자로 주면 콤마없이 값이 전부 붙음 
+//array -> string
 const allBooks = books.join();
 
 console.log(allBooks);
 
+//string -> array
 const newBooks = allBooks.split(',');
 
 console.log(newBooks);

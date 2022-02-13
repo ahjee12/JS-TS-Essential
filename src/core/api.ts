@@ -17,11 +17,6 @@ export class Api {
       const response = await fetch(this.url);
       return await response.json() as AjaxResponse;
 
-            // .then(response => response.json())
-            // .then(cb)
-            // .catch(()=>{
-            //   console.error('데이터를 불러오지 못했습니다.')
-            // })
     } 
 
     // XHR to Fetch & Promise

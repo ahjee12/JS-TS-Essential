@@ -29,7 +29,11 @@ export default class Router {
       if (routePath === '' && this.defaultRoute) {
         this.defaultRoute.page.render();
       }
-      //
+
+      // routePath가 routeTable path에 있는 건지 확인 후 해당 path의 page로 render
+      //routeTable 순서가 확실하다면,, 
+      // if (routePath == this.routeTable[0].path){this.routeTable[0].page.render()}도 되는가?
+
       for (const routeInfo of this.routeTable) {
         if (routePath.indexOf(routeInfo.path) >= 0) {
           routeInfo.page.render();

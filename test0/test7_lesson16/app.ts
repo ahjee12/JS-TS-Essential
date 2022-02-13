@@ -10,6 +10,8 @@ type Box = {
     ['className']?: string;
 }
 
+//객체를 만드는 방법 1.
+// 변수 이용
 let box: Box = {
     width:200,
     height:200,
@@ -17,6 +19,7 @@ let box: Box = {
     backgroundColor:'red',
 }
 
+//객체를 만드는 방법 2.
 // 함수 이용
 function makeBox(
     width:number,
@@ -37,7 +40,7 @@ function makeBox(
 makeBox(100, 100, 0, 'blue');
 
 //-----------------------------------------------------------
-
+//객체를 만드는 방법 3.
 // 클래스 이용
 class Shape implements Box{
     width:number;
