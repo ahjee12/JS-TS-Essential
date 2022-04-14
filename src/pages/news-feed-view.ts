@@ -64,7 +64,7 @@ export default class NewsFeedView extends View {
       //비동기
       if (!this.store.hasFeeds) {
         //class때 형태
-        this.store.setFeeds(await this.api.getDataWithPromise())
+        this.store.setFeeds(await this.api.getDataWithAsync())
       }
 
       for(let i = (this.store.currentPage - 1) * 10; i < this.store.currentPage * 10; i++) {
@@ -98,9 +98,11 @@ export default class NewsFeedView extends View {
       this.updateView();
 
       //callback 
+      //커스텀 promise로 순차적으로 작동하려면 store에 피드 넣기 부분을 인자로 전달
       // if (!this.store.hasFeeds) {
       //     this.api.getDataWithPromise((feeds: NewsFeed[]) => {
       //     this.store.setFeeds(feeds);
+      //여기서 this는 바깥 newsFeedView class이기 때문에 renderView 메소드는 render메소드 바깥에 따로 만들어야 함
       //     this.renderView()
       //   })
 
@@ -115,7 +117,7 @@ export default class NewsFeedView extends View {
     }
       //paging을 할 땐 api호출 안 함 
       
-      //class
+      // 
       // renderView = () => {
       //   for(let i = (this.store.currentPage - 1) * 10; i < this.store.currentPage * 10; i++) {
       //     const { id, title, comments_count, user, points, time_ago, read } = this.store.getFeed(i);

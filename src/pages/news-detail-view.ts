@@ -47,7 +47,7 @@ export default class NewsDetailView extends View {
       // const {title, content, comments} = api.getData();
       // const {title, content, comments} = await api.getDataWithPromise();
       
-      const {title, content, comments } = await api.getDataWithPromise()  
+      const {title, content, comments} = await api.getDataWithAsync()  
       
       // const newsDetail: NewsDetail = api.getData();
       // const {title, content, comments} = data
@@ -62,6 +62,7 @@ export default class NewsDetailView extends View {
       
       this.updateView();
 
+      //callback
       // api.getDataWithPromise((data: NewsDetail)=>{
       //   // const newsDetail: NewsDetail = api.getData();
       //   const {title, content, comments} = data

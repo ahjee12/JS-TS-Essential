@@ -11,15 +11,16 @@ export class Api {
       this.xhr = new XMLHttpRequest();
       this.url = url;
     }
+
     //비동기
     async getRequestWithPromise<AjaxResponse>(): Promise<AjaxResponse> {
       //동기처럼 쓰기
       const response = await fetch(this.url);
       return await response.json() as AjaxResponse;
-
     } 
 
     // XHR to Fetch & Promise
+    //왜 리턴 void?
     // getRequestWithPromise<AjaxResponse>(cb: (data: AjaxResponse) => void): void {
     //   fetch(this.url)
     //         .then(response => response.json())
@@ -48,7 +49,7 @@ export class Api {
   }
   
 export class NewsFeedApi extends Api {
-  async getDataWithPromise(): Promise<NewsFeed[]> {
+  async getDataWithAsync(): Promise<NewsFeed[]> {
     return this.getRequestWithPromise<NewsFeed[]>();
   }
     // getDataWithPromise(cb: (data: NewsFeed[]) => void): void {
@@ -65,7 +66,8 @@ export class NewsFeedApi extends Api {
   }
   
 export class NewsDetailApi extends Api {
-  async getDataWithPromise(): Promise<NewsDetail> {
+  //constructor 반드시 있어야 하는데 없는 경우는 상위 class와 같은 것이 상속된다고 봄
+  async getDataWithAsync(): Promise<NewsDetail> {
     return this.getRequestWithPromise<NewsDetail>();
   }
     // getDataWithPromise(cb: (data: NewsDetail) => void): void {

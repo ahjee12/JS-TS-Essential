@@ -12,6 +12,8 @@ export default class Router {
       window.addEventListener('hashchange', this.route.bind(this));
   
       this.routeTable = [];
+      
+      //첫 페이지 & 안전장치
       this.defaultRoute = null;
     }
     

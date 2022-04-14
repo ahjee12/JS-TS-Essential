@@ -491,8 +491,11 @@ parcelHelpers.export(exports, "default", ()=>Router
 );
 class Router {
     constructor(){
+        //app.ts에서 처럼 router. 쩜 하고 setDefaultPage로 접근하는 게 아니라
+        // 
         window.addEventListener('hashchange', this.route.bind(this));
         this.routeTable = [];
+        //첫 페이지 & 안전장치
         this.defaultRoute = null;
     }
     setDefaultPage(page) {
@@ -510,6 +513,9 @@ class Router {
     route() {
         const routePath = location.hash;
         if (routePath === '' && this.defaultRoute) this.defaultRoute.page.render();
+        // routePath가 routeTable path에 있는 건지 확인 후 해당 path의 page로 render
+        //routeTable 순서가 확실하다면,, 
+        // if (routePath == this.routeTable[0].path){this.routeTable[0].page.render()}도 되는가?
         for (const routeInfo of this.routeTable)if (routePath.indexOf(routeInfo.path) >= 0) {
             routeInfo.page.render();
             break;
@@ -605,7 +611,7 @@ class NewsDetailView extends _viewDefault.default {
             // const newsDetail: NewsDetail = api.getData();
             // const {title, content, comments} = api.getData();
             // const {title, content, comments} = await api.getDataWithPromise();
-            const { title , content , comments  } = await api.getDataWithPromise();
+            const { title , content , comments  } = await api.getDataWithAsync();
             // const newsDetail: NewsDetail = api.getData();
             // const {title, content, comments} = data
             this.store.makeRead(Number(id));
@@ -615,6 +621,7 @@ class NewsDetailView extends _viewDefault.default {
             this.setTemplateData('title', title);
             this.setTemplateData('content', content);
             this.updateView();
+        //callback
         // api.getDataWithPromise((data: NewsDetail)=>{
         //   // const newsDetail: NewsDetail = api.getData();
         //   const {title, content, comments} = data
@@ -707,20 +714,16 @@ class Api {
         //동기처럼 쓰기
         const response = await fetch(this.url);
         return await response.json();
-    // .then(response => response.json())
-    // .then(cb)
-    // .catch(()=>{
-    //   console.error('데이터를 불러오지 못했습니다.')
-    // })
     }
 }
 class NewsFeedApi extends Api {
-    async getDataWithPromise() {
+    async getDataWithAsync() {
         return this.getRequestWithPromise();
     }
 }
 class NewsDetailApi extends Api {
-    async getDataWithPromise() {
+    //constructor 반드시 있어야 하는데 없는 경우는 상위 class와 같은 것이 상속된다고 봄
+    async getDataWithAsync() {
         return this.getRequestWithPromise();
     }
 }
@@ -770,6 +773,8 @@ const template = `
 `;
 class NewsFeedView extends _viewDefault.default {
     // private feeds: NewsFeed[];
+    //constructior에 넣는 변수 의미: 
+    //해당 class의 다른 메소드에서 인자 전달 없이 사용 가능!!
     constructor(containerId, store){
         super(containerId, template);
         //router가 render함수를 호출할 때 생성자에서 호출된 데이터가 왔을지 안왔을지 모름
@@ -778,7 +783,7 @@ class NewsFeedView extends _viewDefault.default {
             this.store.currentPage = Number(location.hash.substr(7) || 1);
             //비동기
             if (!this.store.hasFeeds) //class때 형태
-            this.store.setFeeds(await this.api.getDataWithPromise());
+            this.store.setFeeds(await this.api.getDataWithAsync());
             for(let i = (this.store.currentPage - 1) * 10; i < this.store.currentPage * 10; i++){
                 const { id , title , comments_count , user , points , time_ago , read  } = this.store.getFeed(i);
                 this.addHtml(`
@@ -806,9 +811,11 @@ class NewsFeedView extends _viewDefault.default {
             this.setTemplateData('next_page', String(this.store.nextPage));
             this.updateView();
         //callback 
+        //커스텀 promise로 순차적으로 작동하려면 store에 피드 넣기 부분을 인자로 전달
         // if (!this.store.hasFeeds) {
         //     this.api.getDataWithPromise((feeds: NewsFeed[]) => {
         //     this.store.setFeeds(feeds);
+        //여기서 this는 바깥 newsFeedView class이기 때문에 renderView 메소드는 render메소드 바깥에 따로 만들어야 함
         //     this.renderView()
         //   })
         //store class 만든 후
